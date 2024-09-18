@@ -29,11 +29,6 @@ public class EcotonBackendApplication {
             roleRepository.save(new Role("USER"));
             Role admin = roleRepository.save(new Role("ADMIN"));
             Role organizer = roleRepository.save(new Role("ORGANIZER"));
-
-            Set<Role> roles = new HashSet<>();
-            roles.add(admin);
-
-            User adminUser = new User(1, "admin", "password", roles);
         };
     }
 

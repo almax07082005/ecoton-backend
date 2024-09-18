@@ -30,9 +30,6 @@ public class User implements UserDetails {
 	@Column
 	private String password;
 
-	@Column(name = "vk_id")
-	private String vkId;
-
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "user_role_junction",
