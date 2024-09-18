@@ -1,6 +1,6 @@
 package ecoton.ecotonbackend.controller;
 
-import ecoton.ecotonbackend.entity.User;
+import ecoton.ecotonbackend.entity.roles.User;
 import ecoton.ecotonbackend.model.dto.LoginResponseDTO;
 import ecoton.ecotonbackend.model.dto.RegistrationRequestDTO;
 import ecoton.ecotonbackend.service.AuthService;

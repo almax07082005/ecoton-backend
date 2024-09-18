@@ -1,6 +1,6 @@
 package ecoton.ecotonbackend.model.dto;
 
-import ecoton.ecotonbackend.entity.User;
+import ecoton.ecotonbackend.entity.roles.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

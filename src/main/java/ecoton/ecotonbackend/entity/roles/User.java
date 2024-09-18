@@ -1,5 +1,6 @@
-package ecoton.ecotonbackend.entity;
+package ecoton.ecotonbackend.entity.roles;
 
+import ecoton.ecotonbackend.entity.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

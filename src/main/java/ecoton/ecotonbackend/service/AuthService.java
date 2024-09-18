@@ -1,7 +1,7 @@
 package ecoton.ecotonbackend.service;
 
 import ecoton.ecotonbackend.entity.Role;
-import ecoton.ecotonbackend.entity.User;
+import ecoton.ecotonbackend.entity.roles.User;
 import ecoton.ecotonbackend.model.dto.LoginResponseDTO;
 import ecoton.ecotonbackend.repository.AuthRoleRepository;
 import ecoton.ecotonbackend.repository.AuthUserRepository;
