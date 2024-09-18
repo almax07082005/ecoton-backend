@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: "ecoton-backend"
+  datasource:
+    url: "jdbc:postgresql://ecoton-db:5432/ecoton-db"
+    driver-class-name: "org.postgresql.Driver"
+    username: "${POSTGRES_USER}"
+    password: "${POSTGRES_PASSWORD}"
+  jpa:
+    database: "postgresql"
+    hibernate:
+      ddl-auto: "update"
+    open-in-view: true

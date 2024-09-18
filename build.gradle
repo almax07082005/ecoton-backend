@@ -1,0 +1,81 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.3'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'ecoton'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+bootJar {
+	archiveFileName = "ecoton-backend.jar"
+}
+
+tasks.register("clearDanglingsAndVolumes", Exec) {
+	group "docker"
+	commandLine "docker", "system", "prune", "-f", "--volumes"
+}
+
+tasks.register("stopDockerImage", Exec) {
+	group "docker"
+	commandLine "docker", "compose", "down"
+}
+
+tasks.register("bootJarWithStop") {
+	group "build"
+	dependsOn bootJar
+	dependsOn stopDockerImage
+}
+
+tasks.register("pushDockerImage", Exec) {
+	group "docker"
+	dependsOn buildDockerImage
+	commandLine "docker", "push", "almaxgood/ecoton-backend"
+}
+
+tasks.register("buildDockerImage", Exec) {
+	group "sdocker"
+	dependsOn bootJar
+	commandLine "docker", "build", "-t", "almaxgood/ecoton-backend", "."
+}
+
+tasks.register("rebuildDockerImage", Exec) {
+	group "sdocker"
+	dependsOn bootJarWithStop
+	commandLine "docker", "build", "-t", "almaxgood/ecoton-backend", "."
+}
+
+tasks.register("startDockerImage", Exec) {
+	group "docker"
+	dependsOn buildDockerImage
+	commandLine "docker", "compose", "up", "-d"
+}
+
+tasks.register("restartDockerImage", Exec) {
+	group "docker"
+	dependsOn rebuildDockerImage
+	commandLine "docker", "compose", "up", "-d"
+}
