@@ -1,8 +1,8 @@
 package ecoton.ecotonbackend.controller;
 
-import ecoton.ecotonbackend.entity.roles.User;
 import ecoton.ecotonbackend.model.dto.LoginResponseDTO;
 import ecoton.ecotonbackend.model.dto.RegistrationRequestDTO;
+import ecoton.ecotonbackend.model.dto.RegistrationResponseDTO;
 import ecoton.ecotonbackend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/register")
-	public User register(@RequestBody RegistrationRequestDTO registrationDTO) throws RoleNotFoundException {
+	public RegistrationResponseDTO register(@RequestBody RegistrationRequestDTO registrationDTO) throws RoleNotFoundException {
 		return authService.registerUser(registrationDTO.getUsername(), registrationDTO.getPassword());
 	}
 

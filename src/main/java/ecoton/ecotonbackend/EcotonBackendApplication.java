@@ -1,6 +1,6 @@
 package ecoton.ecotonbackend;
 
-import ecoton.ecotonbackend.entity.Role;
+import ecoton.ecotonbackend.entity.roles.Role;
 import ecoton.ecotonbackend.repository.AuthRoleRepository;
 import ecoton.ecotonbackend.repository.AuthUserRepository;
 import org.springframework.boot.CommandLineRunner;

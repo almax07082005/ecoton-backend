@@ -1,5 +1,6 @@
 package ecoton.ecotonbackend.entity;
 
+import ecoton.ecotonbackend.entity.roles.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,8 +23,13 @@ public class OrganizerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private UserRole userRole;
+
     private String name;
     private String type;
+    private String legalEntityId;
 
     @ManyToMany(
             mappedBy = "organizers",
@@ -36,4 +42,11 @@ public class OrganizerEntity {
         fetch = FetchType.EAGER
     )
     private List<EventEntity> events;
+
+    public OrganizerEntity(UserRole userRole, String name, String type, String legalEntityId) {
+        this.userRole = userRole;
+        this.name = name;
+        this.type = type;
+        this.legalEntityId = legalEntityId;
+    }
 }

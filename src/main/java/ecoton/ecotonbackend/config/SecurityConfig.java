@@ -52,9 +52,11 @@ public class SecurityConfig {
 				.csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(auth -> {
 					auth.requestMatchers("/auth/**").permitAll();
-					auth.requestMatchers("/admin/**").hasRole("ADMIN");
-					auth.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN");
-					auth.anyRequest().authenticated();
+					auth.requestMatchers("/register/**").permitAll();
+//					auth.requestMatchers("/admin/**").hasRole("ADMIN");
+//					auth.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN");
+//					auth.anyRequest().authenticated();
+					auth.anyRequest().permitAll();
 				})
 				.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer ->
 						jwtConfigurer

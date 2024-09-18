@@ -1,10 +1,7 @@
 package ecoton.ecotonbackend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import ecoton.ecotonbackend.entity.roles.UserRole;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +19,20 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private UserRole userRole;
+
     private String name;
     private String email;
     private String gender;
     private Integer age;
+
+    public UserEntity(UserRole userRole, String name, String email, String gender, Integer age) {
+        this.userRole = userRole;
+        this.name = name;
+        this.email = email;
+        this.gender = gender;
+        this.age = age;
+    }
 }

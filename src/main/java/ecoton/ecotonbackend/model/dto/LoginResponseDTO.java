@@ -1,14 +1,14 @@
 package ecoton.ecotonbackend.model.dto;
 
-import ecoton.ecotonbackend.entity.roles.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class LoginResponseDTO {
 
-	private User user;
+	private String username;
 
 	private String jwt;
 

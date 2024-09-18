@@ -1,4 +1,4 @@
-package ecoton.ecotonbackend.entity;
+package ecoton.ecotonbackend.entity.roles;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "auth_roles")
 @Getter
 @Setter
 @NoArgsConstructor
