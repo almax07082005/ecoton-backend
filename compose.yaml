@@ -23,7 +23,7 @@ services:
     depends_on:
       - ecoton-db
     ports:
-      - '8080:8080'
+      - '8008:8008'
       - '5005:5005'
 
 #volumes:
