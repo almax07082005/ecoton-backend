@@ -11,3 +11,6 @@ spring:
     hibernate:
       ddl-auto: "update"
     open-in-view: true
+
+server:
+  port: 8008
