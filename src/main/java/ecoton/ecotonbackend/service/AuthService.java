@@ -42,12 +42,12 @@ public class AuthService {
 		Set<Role> roles = new HashSet<>();
 		roles.add(userRole);
 
+		UserRole savedUser = authUserRepository.save(new UserRole(0, username, encodedPassword, roles));
+
 		Authentication auth = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(username, password)
 		);
 		String token = tokenService.generateJwtToken(auth);
-
-		UserRole savedUser = authUserRepository.save(new UserRole(0, username, encodedPassword, roles));
 
 		return new RegistrationResponseDTO(
 				savedUser.getUsername(),
