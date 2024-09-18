@@ -15,14 +15,12 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
-public class UserEntity {
+@Table(name = "admins")
+public class AdminEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
     private String email;
-    private String gender;
-    private Integer age;
 }

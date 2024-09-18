@@ -2,10 +2,11 @@ package ecoton.ecotonbackend.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,14 +31,14 @@ public class OrganizerEntity {
     private String name;
     private String type;
 
-    @ManyToMany(
-            mappedBy = "events",
+    @OneToMany(
             cascade = {
                     CascadeType.DETACH,
                     CascadeType.MERGE,
                     CascadeType.PERSIST,
                     CascadeType.REFRESH
-            }
+            },
+            fetch = FetchType.EAGER
     )
     private List<EventEntity> events;
 }
