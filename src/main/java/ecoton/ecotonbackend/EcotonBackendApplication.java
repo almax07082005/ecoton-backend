@@ -1,17 +1,13 @@
 package ecoton.ecotonbackend;
 
 import ecoton.ecotonbackend.entity.Role;
-import ecoton.ecotonbackend.entity.User;
-import ecoton.ecotonbackend.repository.RoleRepository;
-import ecoton.ecotonbackend.repository.UserRepository;
+import ecoton.ecotonbackend.repository.AuthRoleRepository;
+import ecoton.ecotonbackend.repository.AuthUserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @SpringBootApplication
 public class EcotonBackendApplication {
@@ -20,7 +16,7 @@ public class EcotonBackendApplication {
     }
 
     @Bean
-    public CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public CommandLineRunner run(AuthRoleRepository roleRepository, AuthUserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             if (roleRepository.findByAuthority("ADMIN").isPresent()) {
                 return;

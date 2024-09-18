@@ -3,8 +3,8 @@ package ecoton.ecotonbackend.service;
 import ecoton.ecotonbackend.entity.Role;
 import ecoton.ecotonbackend.entity.User;
 import ecoton.ecotonbackend.model.dto.LoginResponseDTO;
-import ecoton.ecotonbackend.repository.RoleRepository;
-import ecoton.ecotonbackend.repository.UserRepository;
+import ecoton.ecotonbackend.repository.AuthRoleRepository;
+import ecoton.ecotonbackend.repository.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,9 +24,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AuthService {
 
-	private final UserRepository userRepository;
+	private final AuthUserRepository userRepository;
 
-	private final RoleRepository roleRepository;
+	private final AuthRoleRepository roleRepository;
 
 	private final PasswordEncoder passwordEncoder;
 
