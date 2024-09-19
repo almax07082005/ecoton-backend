@@ -23,8 +23,9 @@ public class EcotonBackendApplication {
             }
 
             roleRepository.save(new Role("USER"));
-            Role admin = roleRepository.save(new Role("ADMIN"));
             Role organizer = roleRepository.save(new Role("ORGANIZER"));
+            Role official = roleRepository.save(new Role("OFFICIAL"));
+            Role admin = roleRepository.save(new Role("ADMIN"));
         };
     }
 

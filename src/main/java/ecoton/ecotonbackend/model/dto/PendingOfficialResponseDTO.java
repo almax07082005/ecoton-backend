@@ -1,20 +1,24 @@
 package ecoton.ecotonbackend.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-public class RegistrationFormUserRequestDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class PendingOfficialResponseDTO {
+
+	private Integer id;
 
 	@JsonProperty("user_id")
 	private Integer userId;
-
-	private Integer age;
 
 	private String name;
 
 	private String email;
 
-	private String gender;
+	private String jobTitle;
 
 }

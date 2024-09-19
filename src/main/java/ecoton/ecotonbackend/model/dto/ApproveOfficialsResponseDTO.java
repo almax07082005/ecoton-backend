@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApproveOrganizersResponseDTO {
+public class ApproveOfficialsResponseDTO {
 
 	private Integer id;
 

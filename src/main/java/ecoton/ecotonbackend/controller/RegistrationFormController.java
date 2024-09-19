@@ -1,7 +1,6 @@
 package ecoton.ecotonbackend.controller;
 
-import ecoton.ecotonbackend.model.dto.RegistrationFormOrganizerRequestDTO;
-import ecoton.ecotonbackend.model.dto.RegistrationFormUserRequestDTO;
+import ecoton.ecotonbackend.model.dto.RegistrationFormRequestDTO;
 import ecoton.ecotonbackend.model.dto.RegistrationFormResponseDTO;
 import ecoton.ecotonbackend.service.RegistrationFormService;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +19,8 @@ public class RegistrationFormController {
 		return "Access to /register/test works without authentication!";
 	}
 
-	@PostMapping("/fill_form_user")
-	public RegistrationFormResponseDTO fillRegistrationForm(@RequestBody RegistrationFormUserRequestDTO form) {
-		return registrationFormService.fillRegistrationFormUser(form);
-	}
-
-	@PostMapping("/fill_form_organizer")
-	public RegistrationFormResponseDTO fillRegistrationFormOrganizer(@RequestBody RegistrationFormOrganizerRequestDTO form) {
-		return registrationFormService.fillRegistrationFormOrganizer(form);
+	@PostMapping("/fill_form")
+	public RegistrationFormResponseDTO fillRegistrationForm(@RequestBody RegistrationFormRequestDTO form) {
+		return registrationFormService.fillRegistrationForm(form);
 	}
 }
