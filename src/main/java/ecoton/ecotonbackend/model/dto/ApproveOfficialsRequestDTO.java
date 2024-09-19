@@ -8,17 +8,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PendingOrganizerResponseDTO {
+public class ApproveOfficialsRequestDTO {
 
 	private Integer id;
 
-	@JsonProperty("user_id")
-	private Integer userId;
-
-	private String name;
-
-	private String type;
-
-	private String legalEntityId;
+	@JsonProperty("is_approved")
+	private Boolean isApproved;
 
 }

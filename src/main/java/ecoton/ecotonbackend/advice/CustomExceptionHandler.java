@@ -1,6 +1,7 @@
 package ecoton.ecotonbackend.advice;
 
 import ecoton.ecotonbackend.exceptions.BaseException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,23 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
                 new HttpHeaders(),
                 exception.getStatus(),
                 request
+        );
+    }
+
+    @ExceptionHandler(value = {
+        DataIntegrityViolationException.class
+    })
+    protected ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException exception, WebRequest request) {
+        return handleExceptionInternal(
+            exception,
+            ResponseBody.builder()
+                .exceptionName(exception.getClass().getName())
+                .detail(exception.getMessage())
+                .stackTrace(Arrays.toString(exception.getStackTrace()))
+                .build(),
+            new HttpHeaders(),
+            HttpStatus.BAD_REQUEST,
+            request
         );
     }
 

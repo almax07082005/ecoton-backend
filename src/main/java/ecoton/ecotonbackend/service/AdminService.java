@@ -1,12 +1,12 @@
 package ecoton.ecotonbackend.service;
 
-import ecoton.ecotonbackend.entity.OrganizerEntity;
-import ecoton.ecotonbackend.entity.PendingOrganizerEntity;
-import ecoton.ecotonbackend.model.dto.ApproveOrganizersRequestDTO;
-import ecoton.ecotonbackend.model.dto.ApproveOrganizersResponseDTO;
-import ecoton.ecotonbackend.model.dto.PendingOrganizerResponseDTO;
-import ecoton.ecotonbackend.repository.OrganizerRepository;
-import ecoton.ecotonbackend.repository.PendingOrganizerRepository;
+import ecoton.ecotonbackend.entity.OfficialEntity;
+import ecoton.ecotonbackend.entity.PendingOfficialEntity;
+import ecoton.ecotonbackend.model.dto.ApproveOfficialsRequestDTO;
+import ecoton.ecotonbackend.model.dto.ApproveOfficialsResponseDTO;
+import ecoton.ecotonbackend.model.dto.PendingOfficialResponseDTO;
+import ecoton.ecotonbackend.repository.OfficialRepository;
+import ecoton.ecotonbackend.repository.PendingOfficialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,64 +17,62 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class AdminService {
 
-	private final PendingOrganizerRepository pendingOrganizerRepository;
+	private final PendingOfficialRepository pendingOfficialRepository;
 
-	private final OrganizerRepository organizerRepository;
+	private final OfficialRepository officialRepository;
 
-	public List<PendingOrganizerResponseDTO> pendingOrganizers() {
-		List<PendingOrganizerEntity> pendingOrganizers = pendingOrganizerRepository.findAllByStatus("pending");
+	public List<PendingOfficialResponseDTO> pendingOfficials() {
+		List<PendingOfficialEntity> pendingOfficials = pendingOfficialRepository.findAllByStatus("pending");
 
-		return pendingOrganizers.stream()
-				.map(entity -> new PendingOrganizerResponseDTO(
+		return pendingOfficials.stream()
+				.map(entity -> new PendingOfficialResponseDTO(
 						entity.getId(),
 						entity.getUserRole().getUserId(),
 						entity.getName(),
-						entity.getType(),
-						entity.getLegalEntityId()
+						entity.getEmail(),
+						entity.getJobTitle()
 				))
 				.toList();
 	}
 
-	public List<ApproveOrganizersResponseDTO> approveOrganizers(List<ApproveOrganizersRequestDTO> organizers) {
-		List<Integer> toApprove = organizers.stream()
-				.filter(ApproveOrganizersRequestDTO::getIsApproved)
-				.map(ApproveOrganizersRequestDTO::getId)
+	public List<ApproveOfficialsResponseDTO> approveOfficials(List<ApproveOfficialsRequestDTO> officials) {
+		List<Integer> toApprove = officials.stream()
+				.filter(official -> official.getIsApproved() != null && official.getIsApproved())
+				.map(ApproveOfficialsRequestDTO::getId)
 				.toList();
 
 		if (!toApprove.isEmpty()) {
-			pendingOrganizerRepository.approvePendingOrganizers(toApprove);
+			pendingOfficialRepository.approvePendingOfficials(toApprove);
 		}
 
-		List<Integer> toReject = organizers.stream()
-				.filter(organizer -> !organizer.getIsApproved())
-				.map(ApproveOrganizersRequestDTO::getId)
+		List<Integer> toReject = officials.stream()
+				.filter(official -> official.getIsApproved() != null && !official.getIsApproved())
+				.map(ApproveOfficialsRequestDTO::getId)
 				.toList();
 
 		if (!toReject.isEmpty()) {
-			pendingOrganizerRepository.rejectPendingOrganizers(toReject);
+			pendingOfficialRepository.rejectPendingOfficials(toReject);
 		}
 
 		List<Integer> allIds = Stream.concat(toApprove.stream(), toReject.stream()).toList();
-		List<PendingOrganizerEntity> updatedOrganizers = pendingOrganizerRepository.findAllById(allIds);
+		List<PendingOfficialEntity> updatedOfficials = pendingOfficialRepository.findAllById(allIds);
 
-		List<OrganizerEntity> organizersToSave = updatedOrganizers.stream()
-				.filter(organizer -> "approved".equals(organizer.getStatus()))
-				.map(pending -> new OrganizerEntity(
+		List<OfficialEntity> officialsToSave = updatedOfficials.stream()
+				.filter(official -> "approved".equals(official.getStatus()))
+				.map(pending -> new OfficialEntity(
 						pending.getUserRole(),
-						pending.getName(),
-						pending.getType(),
-						pending.getLegalEntityId()
+						pending.getJobTitle()
 				))
 				.toList();
 
-		if (!organizersToSave.isEmpty()) {
-			organizerRepository.saveAll(organizersToSave);
+		if (!officialsToSave.isEmpty()) {
+			officialRepository.saveAll(officialsToSave);
 		}
 
-		return updatedOrganizers.stream()
-				.map(organizer -> new ApproveOrganizersResponseDTO(
-						organizer.getId(),
-						organizer.getStatus()
+		return updatedOfficials.stream()
+				.map(official -> new ApproveOfficialsResponseDTO(
+						official.getId(),
+						official.getStatus()
 				))
 				.toList();
 	}

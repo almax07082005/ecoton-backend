@@ -7,9 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
-import org.hibernate.annotations.Fetch;
-
-import java.util.List;
 
 @Entity
 @Jacksonized
@@ -17,8 +14,8 @@ import java.util.List;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "pending_organizers")
-public class PendingOrganizerEntity {
+@Table(name = "pending_officials")
+public class PendingOfficialEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -28,16 +25,19 @@ public class PendingOrganizerEntity {
 	private UserRole userRole;
 
 	private String name;
-	private String type;
-	private String legalEntityId;
+
+	private String email;
+
+	private String jobTitle;
+
 	@Builder.Default
 	private String status = "pending";
 
-	public PendingOrganizerEntity(UserRole userRole, String name, String type, String legalEntityId) {
+	public PendingOfficialEntity(UserRole userRole, String name, String email, String jobTitle) {
 		this.userRole = userRole;
 		this.name = name;
-		this.type = type;
-		this.legalEntityId = legalEntityId;
+		this.email = email;
+		this.jobTitle = jobTitle;
 		this.status = "pending";
 	}
 }
