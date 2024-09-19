@@ -60,7 +60,7 @@ tasks.register("bootJarWithStop") {
 tasks.register("pushDockerImage", Exec) {
 	group "docker"
 	dependsOn buildDockerImage
-	commandLine "docker", "push", "almaxgood/ecoton-backend"
+	commandLine "docker", "push", "almaxgood/ecoton-backend:latest"
 }
 
 tasks.register("buildDockerImage", Exec) {
