@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RequestMapping("/organizers")
 @RestController
@@ -25,6 +27,11 @@ public class OrganizerController {
     @GetMapping("/{id}")
     public ResponseEntity<OrganizerDTO> getOrganizerById(@PathVariable Integer id) {
         return ResponseEntity.ok(organizerService.getOrganizer(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrganizerDTO>> getOrganizers() {
+        return ResponseEntity.ok(organizerService.getAllOrganizers());
     }
 
     @DeleteMapping("/{id}")

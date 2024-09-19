@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -30,6 +31,16 @@ public class OrganizerService {
         }
 
         return OrganizerMapper.instance.map(organizerEntity.get());
+    }
+
+    public List<OrganizerDTO> getAllOrganizers() {
+        List<OrganizerDTO> organizerDTOs = new ArrayList<>();
+
+        for (OrganizerEntity organizerEntity : organizerRepository.findAll()) {
+            organizerDTOs.add(OrganizerMapper.instance.map(organizerEntity));
+        }
+
+        return organizerDTOs;
     }
 
     public OrganizerEntity getOrganizerEntity(Integer id) {
