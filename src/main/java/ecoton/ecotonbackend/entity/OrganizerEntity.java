@@ -1,33 +1,37 @@
 package ecoton.ecotonbackend.entity;
 
 import ecoton.ecotonbackend.entity.roles.UserRole;
-import jakarta.persistence.*;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
 @Entity
 @Jacksonized
-@Data
+@EqualsAndHashCode
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Builder(toBuilder = true)
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "organizers")
 public class OrganizerEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -39,14 +43,9 @@ public class OrganizerEntity {
     private String legalEntityId;
 
     @OneToMany(
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            },
             fetch = FetchType.EAGER
     )
+    @JoinColumn(name = "organizer_id")
     private List<EventEntity> events;
 
     public OrganizerEntity(UserRole userRole, String name, String type, String legalEntityId) {

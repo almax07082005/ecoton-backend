@@ -2,6 +2,7 @@ package ecoton.ecotonbackend.controller;
 
 import ecoton.ecotonbackend.dto.EventDTO;
 import ecoton.ecotonbackend.request.create.EventCreateRequest;
+import ecoton.ecotonbackend.request.update.EventUpdateRequest;
 import ecoton.ecotonbackend.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/events")
 @RestController
-// TODO add update method to event and organizer
-// TODO one-to-many relationship is broken
 public class EventController {
 
     private final EventService eventService;
@@ -41,8 +40,8 @@ public class EventController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateEvent(@PathVariable Integer id, @RequestBody EventCreateRequest eventCreateRequest) {
-        eventService.updateEvent(id, eventCreateRequest);
+    public ResponseEntity<Void> updateEvent(@PathVariable Integer id, @RequestBody EventUpdateRequest eventUpdateRequest) {
+        eventService.updateEvent(id, eventUpdateRequest);
         return ResponseEntity.ok().build();
     }
 }
