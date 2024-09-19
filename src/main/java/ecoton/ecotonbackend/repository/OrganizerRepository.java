@@ -10,5 +10,4 @@ import java.util.Optional;
 @Repository
 public interface OrganizerRepository extends JpaRepository<OrganizerEntity, Integer> {
     Optional<OrganizerEntity> findById(@NonNull Integer id);
-    void deleteById(@NonNull Integer id);
 }

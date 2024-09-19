@@ -12,26 +12,30 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
+@EqualsAndHashCode
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Builder(toBuilder = true)
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "events")
 public class EventEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String name;
-    private String description; // restricted size
+    private String description;
     private Long mapsId;
     private LocalDateTime dateTime;
     private String imageName;
@@ -40,41 +44,8 @@ public class EventEntity {
     private List<UserEntity> participants;
 
     @ManyToOne(
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            },
-            fetch = FetchType.EAGER,
-            optional = false
+            fetch = FetchType.EAGER
     )
     @JoinColumn(name = "organizer_id")
     private OrganizerEntity organizer;
 }
-
-/*
-CRUD for organizers
-append to list of users to event
-
-get events for departments:
-    private Integer id;
-    private String name;
-    private String description;
-    private Long mapsId;
-    private LocalDateTime dateTime;
-    private List<name of organizers> organizers;
-    private Integer participantsAmount;
-
-get organizers for departments:
-    private Integer id;
-    private String name;
-    private String type;
-
-get participants for departments:
-    private Integer id;
-    private String name;
-    private String email;
-    private String gender;
-    private Integer age;
-*/

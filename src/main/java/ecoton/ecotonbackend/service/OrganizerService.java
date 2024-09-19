@@ -4,8 +4,11 @@ import ecoton.ecotonbackend.dto.OrganizerDTO;
 import ecoton.ecotonbackend.entity.OrganizerEntity;
 import ecoton.ecotonbackend.exceptions.OrganizerNotExistException;
 import ecoton.ecotonbackend.mapper.OrganizerMapper;
+import ecoton.ecotonbackend.repository.EventRepository;
 import ecoton.ecotonbackend.repository.OrganizerRepository;
 import ecoton.ecotonbackend.request.create.OrganizerCreateRequest;
+import ecoton.ecotonbackend.request.update.OrganizerUpdateRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +17,11 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class OrganizerService {
 
     private final OrganizerRepository organizerRepository;
+    private final EventRepository eventRepository;
 
     public OrganizerDTO getOrganizer(Integer id) {
         Optional<OrganizerEntity> organizerEntity = organizerRepository.findById(id);
@@ -42,14 +47,30 @@ public class OrganizerService {
             throw new OrganizerNotExistException();
         }
 
-        organizerRepository.deleteById(id);
+        eventRepository.deleteAll(organizerEntity.get().getEvents());
+        organizerRepository.delete(organizerEntity.get());
     }
 
     public void createOrganizer(OrganizerCreateRequest organizerCreateRequest) {
         organizerRepository.save(OrganizerEntity.builder()
                 .name(organizerCreateRequest.getName())
                 .type(organizerCreateRequest.getType())
+                .userRole(organizerCreateRequest.getUserRole())
+                .legalEntityId(organizerCreateRequest.getLegalEntityId())
                 .events(new ArrayList<>())
                 .build());
+    }
+
+    public void updateOrganizer(Integer id, OrganizerUpdateRequest organizerUpdateRequest) {
+        Optional<OrganizerEntity> organizerEntity = organizerRepository.findById(id);
+        if (organizerEntity.isEmpty()) {
+            throw new OrganizerNotExistException();
+        }
+
+        organizerRepository.save(organizerEntity.get().toBuilder()
+                .name(organizerUpdateRequest.getName())
+                .type(organizerUpdateRequest.getType())
+                .build()
+        );
     }
 }
