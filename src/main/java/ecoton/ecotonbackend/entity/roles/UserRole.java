@@ -1,6 +1,5 @@
 package ecoton.ecotonbackend.entity.roles;
 
-import ecoton.ecotonbackend.model.dto.RegistrationResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +37,11 @@ public class UserRole implements UserDetails {
 			inverseJoinColumns = {@JoinColumn(name = "role_id")}
 	)
 	private Set<Role> authorities;
+
+	public UserRole(String email, Set<Role> roles) {
+		this.username = email;
+		this.authorities = roles;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

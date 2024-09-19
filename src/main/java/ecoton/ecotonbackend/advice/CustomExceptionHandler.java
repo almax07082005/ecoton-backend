@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -63,6 +64,23 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
                 new HttpHeaders(),
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 request
+        );
+    }
+
+    @ExceptionHandler(value = {
+        InternalAuthenticationServiceException.class
+    })
+    protected ResponseEntity<Object> handleInternalAuthenticationServiceException(Exception exception, WebRequest request) {
+        return handleExceptionInternal(
+            exception,
+            ResponseBody.builder()
+                .exceptionName(exception.getClass().getName())
+                .detail(exception.getMessage())
+                .stackTrace(Arrays.toString(exception.getStackTrace()))
+                .build(),
+            new HttpHeaders(),
+            HttpStatus.BAD_REQUEST,
+            request
         );
     }
 }

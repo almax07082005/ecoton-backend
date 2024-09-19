@@ -26,4 +26,9 @@ public class AuthController {
 	public LoginResponseDTO loginUser(@RequestBody RegistrationRequestDTO body) {
 		return authService.loginUser(body.getUsername(), body.getPassword());
 	}
+
+	@GetMapping("/login")
+	public String loginUser() {
+		return "With Google: <a href=\"/oauth2/authorization/google\">click here</a>";
+	}
 }

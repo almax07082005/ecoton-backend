@@ -28,7 +28,7 @@ public class AdminController {
 	}
 
 	@PostMapping("/approve_officials")
-	public List<ApproveOfficialsResponseDTO> approveOrganizers(@RequestBody List<ApproveOfficialsRequestDTO> officials) {
+	public List<ApproveOfficialsResponseDTO> approveOfficials(@RequestBody List<ApproveOfficialsRequestDTO> officials) {
 		return adminService.approveOfficials(officials);
 	}
 

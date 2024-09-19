@@ -5,8 +5,11 @@ import ecoton.ecotonbackend.entity.OrganizerEntity;
 import ecoton.ecotonbackend.entity.PendingOfficialEntity;
 import ecoton.ecotonbackend.entity.UserEntity;
 import ecoton.ecotonbackend.entity.roles.RolesEnum;
+import ecoton.ecotonbackend.exceptions.LegalEntityDoesNotExistException;
 import ecoton.ecotonbackend.exceptions.RoleDoesNotExistException;
 import ecoton.ecotonbackend.exceptions.UserDoesNotExistException;
+import ecoton.ecotonbackend.model.dto.LegalEntityFirstResponseDTO;
+import ecoton.ecotonbackend.model.dto.LegalEntitySecondResponseDTO;
 import ecoton.ecotonbackend.model.dto.RegistrationFormRequestDTO;
 import ecoton.ecotonbackend.model.dto.RegistrationFormResponseDTO;
 import ecoton.ecotonbackend.repository.AuthUserRepository;
@@ -14,7 +17,11 @@ import ecoton.ecotonbackend.repository.OrganizerRepository;
 import ecoton.ecotonbackend.repository.PendingOfficialRepository;
 import ecoton.ecotonbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.Map;
 
 
 @Service
@@ -28,6 +35,8 @@ public class RegistrationFormService {
 	private final OrganizerRepository organizerRepository;
 
 	private final PendingOfficialRepository pendingOfficialRepository;
+
+	private final WebClient webClient = WebClient.create();
 
 	public RegistrationFormResponseDTO fillRegistrationForm(RegistrationFormRequestDTO form) {
 		try {
@@ -83,6 +92,17 @@ public class RegistrationFormService {
 
 	private RegistrationFormResponseDTO fillRegistrationFormOrganizer(RegistrationFormRequestDTO form) {
 
+		try {
+			var legalEntityId = Long.parseLong(form.getLegalEntityId());
+			var legalEntityExists = getLegalEntityInfo(legalEntityId);
+			if (!legalEntityExists) {
+				throw new LegalEntityDoesNotExistException();
+			}
+
+		} catch (NullPointerException e) {
+			throw new LegalEntityDoesNotExistException();
+		}
+
 		var organizerToSave = new OrganizerEntity(
 				authUserRepository.findById(form.getUserId()).orElseThrow(UserDoesNotExistException::new),
 				form.getName(),
@@ -95,5 +115,42 @@ public class RegistrationFormService {
 				organizer.getUserRole().getUsername(),
 				true
 		);
+	}
+
+	private Boolean getLegalEntityInfo(Long entityId) {
+		var uri = "https://egrul.nalog.ru/";
+
+		var response = webClient.post()
+				.uri(uri)
+				.contentType(MediaType.APPLICATION_JSON)
+				.bodyValue(Map.of("query", entityId))
+				.retrieve()
+				.bodyToMono(LegalEntityFirstResponseDTO.class)
+				.block();
+
+		String token;
+		try {
+			token = response.getT();
+		} catch (NullPointerException e) {
+			throw new LegalEntityDoesNotExistException();
+		}
+
+		var responseTwo = webClient.get()
+				.uri(uri + "search-result/" + token)
+				.retrieve()
+				.bodyToMono(LegalEntitySecondResponseDTO.class)
+				.block();
+
+
+		try {
+			System.out.println(responseTwo.getRows().get(0));
+			if (responseTwo.getRows().stream().anyMatch(row -> String.valueOf(entityId).equals(row.getO()))) {
+				return true;
+			}
+		} catch (NullPointerException e) {
+			throw new LegalEntityDoesNotExistException();
+		}
+		return false;
+
 	}
 }

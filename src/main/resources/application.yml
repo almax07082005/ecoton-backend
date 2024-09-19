@@ -1,5 +1,4 @@
 spring:
-
   application:
     name: "ecoton-backend"
   datasource:
@@ -12,6 +11,19 @@ spring:
     hibernate:
       ddl-auto: "create-drop"
     open-in-view: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: "${CLIENT_ID}"
+            client-secret: "${CLIENT_SECRET}"
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
 
 server:
   port: 8008
