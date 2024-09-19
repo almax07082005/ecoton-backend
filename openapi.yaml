@@ -1,0 +1,413 @@
+openapi: 3.0.1
+info:
+  title: Ecoton Backend API
+  version: 1.0.0
+  description: API documentation for the Ecoton Backend
+
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: Admin
+    description: Endpoints related to admin operations
+  - name: Events
+    description: Endpoints related to event management
+  - name: Organizers
+    description: Endpoints related to organizer management
+  - name: Registration
+    description: Endpoints related to registration and forms
+  - name: User
+    description: Endpoints related to user operations
+
+paths:
+
+  /admin/pending_officials:
+    get:
+      tags:
+        - Admin
+      summary: Get pending officials
+      operationId: getPendingOfficials
+      responses:
+        200:
+          description: List of pending officials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PendingOfficialResponseDTO'
+
+  /admin/approve_officials:
+    post:
+      tags:
+        - Admin
+      summary: Approve officials
+      operationId: approveOfficials
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ApproveOfficialsRequestDTO'
+      responses:
+        200:
+          description: List of approved officials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApproveOfficialsResponseDTO'
+
+  /events:
+    post:
+      tags:
+        - Events
+      summary: Create a new event
+      operationId: createEvent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCreateRequest'
+      responses:
+        200:
+          description: Event created
+
+  /events/{id}:
+    patch:
+      tags:
+        - Events
+      summary: Update event by ID
+      operationId: updateEventById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventUpdateRequest'
+      responses:
+        200:
+          description: Event updated
+
+    get:
+      tags:
+        - Events
+      summary: Get event by ID
+      operationId: getEventById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Event details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventDTO'
+
+    delete:
+      tags:
+        - Events
+      summary: Delete event by ID
+      operationId: deleteEventById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Event deleted
+
+  /organizers/{id}:
+    get:
+      tags:
+        - Organizers
+      summary: Get organizer by ID
+      operationId: getOrganizerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Organizer details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizerDTO'
+
+    patch:
+      tags:
+        - Organizers
+      summary: Update organizer by ID
+      operationId: updateOrganizerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizerUpdateRequest'
+      responses:
+        200:
+          description: Organizer updated
+
+
+    delete:
+      tags:
+        - Organizers
+      summary: Delete organizer by ID
+      operationId: deleteOrganizerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Organizer deleted
+
+  /organizers:
+    post:
+      tags:
+        - Organizers
+      summary: Create a new organizer
+      operationId: createOrganizer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizerCreateRequest'
+      responses:
+        200:
+          description: Organizer created
+
+  /register/fill_form:
+    post:
+      tags:
+        - Registration
+      summary: Fill registration form
+      operationId: fillRegistrationForm
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationFormRequestDTO'
+      responses:
+        200:
+          description: Registration form filled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationFormResponseDTO'
+
+  /user:
+    get:
+      tags:
+        - User
+      summary: Get user-level access
+      operationId: getUserLevelAccess
+      responses:
+        200:
+          description: User-level access granted
+          content:
+            text/plain:
+              schema:
+                type: string
+
+components:
+  schemas:
+    PendingOfficialResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+          description: The user ID
+        name:
+          type: string
+        email:
+          type: string
+        jobTitle:
+          type: string
+
+    ApproveOfficialsRequestDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        is_approved:
+          type: boolean
+          description: Approval status
+
+    ApproveOfficialsResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          description: Status of approval
+
+    EventDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        mapsId:
+          type: integer
+        dateTime:
+          type: string
+          format: date-time
+        imageName:
+          type: string
+        participantsAmount:
+          type: integer
+        orgName:
+          type: string
+
+    EventCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        mapsId:
+          type: integer
+        dateTime:
+          type: string
+          format: date-time
+        imageName:
+          type: string
+        participantsAmount:
+          type: integer
+        orgName:
+          type: string
+
+    EventUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        mapsId:
+          type: integer
+        dateTime:
+          type: string
+          format: date-time
+        imageName:
+          type: string
+        participantsAmount:
+          type: integer
+        orgName:
+          type: string
+
+    OrganizerDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+
+    OrganizerCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+
+    OrganizerUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+
+    RegistrationFormRequestDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+        age:
+          type: integer
+        gender:
+          type: string
+        jobTitle:
+          type: string
+        type:
+          type: string
+        legalEntityId:
+          type: string
+
+    RegistrationFormResponseDTO:
+      type: object
+      properties:
+        username:
+          type: string
+        registration_form_success:
+          type: boolean
+        message:
+          type: string
+
+    LoginResponseDTO:
+      type: object
+      properties:
+        username:
+          type: string
+        jwt:
+          type: string
+
+    RegistrationResponseDTO:
+      type: object
+      properties:
+        username:
+          type: string
+        registration_success:
+          type: boolean
+        message:
+          type: string
+        jwt:
+          type: string
